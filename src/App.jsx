@@ -2,8 +2,11 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import TodoList from "./components/TodoList";
 import ToDo from "./components/ToDo";
+// import "../node_modules/font-awesome/css/font-awesome.min.css";
 const App = () => {
   const [tasks, setTasks] = useState([]);
+  const [search, setSearch] = useState("");
+  const [showAll, setShowAll] = useState(true);
   useEffect(() => {
     if (localStorage.getItem("tasks")) {
       const AllTasks = JSON.parse(localStorage.getItem("tasks"));
@@ -40,15 +43,35 @@ const App = () => {
     localStorage.setItem("tasks", JSON.stringify(updateTask));
   };
   const clearAll = () => {
-    console.log("work");
     localStorage.setItem("tasks", JSON.stringify([]));
     setTasks([]);
   };
 
+  const searchTask = (searchItem) => {
+    setShowAll(false);
+    setSearch(searchItem);
+  };
+
+  const showList = () => {
+    setShowAll(true);
+  };
+
   return (
     <>
-      <TodoList addTask={addTask} clearAll={clearAll}>
-        <ToDo tasks={tasks} delTask={delTask} comTask={comTask} />
+      <TodoList
+        addTask={addTask}
+        clearAll={clearAll}
+        searchTask={searchTask}
+        showList={showList}
+        showAll={showAll}
+      >
+        <ToDo
+          tasks={tasks}
+          delTask={delTask}
+          comTask={comTask}
+          search={search}
+          showAll={showAll}
+        />
       </TodoList>
     </>
   );
